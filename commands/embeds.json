@@ -1,0 +1,27 @@
+{
+  "titles":[
+"Как обычно",
+"Жарко",
+"Дождливо",
+"Ясно",
+"Мороз"
+           ],
+  "thmls":[
+"https://i.ya-webdesign.com/images/thumb-clipart-big-thumbs-up-1.png",
+"https://avatanplus.com/files/resources/original/5b314a2f7e6ef1643889c99e.png",
+"https://ya-webdesign.com/images250_/crying-meme-png.png",
+"http://kilobank.ru/wp-content/uploads/2017/08/telegram-channel-photos_telegrams.jpg",
+"https://pp.userapi.com/c639424/u3408477/video/l_4a4c16a1.jpg"
+  ],
+  "colors":[
+"#26de81",
+"#eb3b5a",
+"#778ca3",
+"#fed330",
+"#3867d6"
+  ],
+   "commands":[
+"Restart",
+"Today"
+  ]
+}
