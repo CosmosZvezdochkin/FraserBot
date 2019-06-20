@@ -1,12 +1,11 @@
-module.exports = {
-	name: 'today',
-	description: 'What today is a day?',
-	execute(message) {
-		const Discord = require('discord.js');
-		const embed = require('./embeds.json');
+const Discord = require('discord.js');
 
-		const rNum = Math.floor(Math.random(0,5)*10);
-		message.author.send(rNum)
+module.exports.run = async(bot,message,args) =>{
+
+
+		const embed = require('./embeds.json');
+		const rNum = Math.floor(Math.random(0,5)*10);///Переменнная rNum содержит случайное число от 0 до 9
+		message.delete();
 
 		switch(rNum){
 			case 0: 
@@ -96,6 +95,9 @@ module.exports = {
 			message.author.send(emd10);
 			
 			break;
-		}
-	},
-};
+		}///Конец Switch
+}///Конец метода run
+
+module.exports.help ={
+    name: 'today'
+}
