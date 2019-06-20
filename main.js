@@ -1,55 +1,60 @@
-const fs = require('fs');
-const Discord = require('discord.js');
-const client = new Discord.Client();
-const {token,prefix}= require('./config.json');
+const config = require("./config.json");
+const Discord = require("discord.js");
+const fs = require("fs");
+const bot = new Discord.Client({disableEveryone: true});
+bot.commands = new Discord.Collection();
 
-client.commands = new Discord.Collection();
-const commandFiles = fs.readdirSync('./commands').filter(file => file.endsWith('.js'));
+fs.readdir("./commands/", (err, files) => {
 
-client.on('ready', () => {
-  var coun = client.guilds.size
-  var jk = ""
-  switch (coun){
-  	case 1:
-  	jk="сервер"
-  	break;
-  	case 2:
-  	jk="сервера";
-  	break;
-  	case 3:
-   	jk="сервера";
-  	break; 	
-  	case 4:
-  	jk="сервера";
-  	break;
-  	default:
-  	jk="серверов";
-  	break;
+  if(err) console.log(err);
+  let jsfile = files.filter(f => f.split(".").pop() === "js")
+  if(jsfile.length <= 0){
+    console.log("Команды не были найдены.");
+    return;
   }
 
-  console.log(`Запущен как ${client.user.tag}!`);
-  client.user.setActivity(`Обслуживаю ${coun} ${jk}`, { type: 'STREAMING' });
+  jsfile.forEach((f, i) =>{
+    let props = require(`./commands/${f}`);
+    console.log(`${f} файл загружен!`);
+    bot.commands.set(props.help.name, props);
+  });
 });
 
-for (const file of commandFiles) {
-	const command = require(`./commands/${file}`);
-	client.commands.set(command.name, command);
-}
+bot.on("ready", async () => {
+  var count = bot.guilds.size///Показывает кол-во серверов ,на которых находиться бот
+  var servers = ""
+  switch (count){
+  	case 1:
+  	servers="сервер"
+  	break;
+  	case 2:
+  	servers="сервера";
+  	break;
+  	case 3:
+    servers="сервера";
+  	break; 	
+  	case 4:
+  	servers="сервера";
+  	break;
+  	default:
+  	servers="серверов";
+  	break;       }///конец switch
 
-client.on('message', message => {
-	if (!message.content.startsWith(prefix) || message.author.bot) return;
-
-	const args = message.content.slice(prefix.length).split(/ +/);
-	const command = args.shift().toLowerCase();
-
-	if (!client.commands.has(command)) return;
-
-	try {
-		client.commands.get(command).execute(message, args);
-	} catch (error) {
-		console.error(error);
-		message.reply('возникла ошибка при вызове команды!');
-	}
+  console.log(`Запущен как ${bot.user.tag}`);
+  bot.user.setActivity(`Обслуживаю ${count} ${servers}`, { type: 'STREAMING' });///Ставит статус боту с типом "Стримит на TWITCH"
 });
 
-client.login(token);
+bot.on("message", async message => {
+  if(message.author.bot) return;
+  if(message.channel.type === "dm") return;
+
+  let prefix = config.prefix;
+  let messageArray = message.content.split(" ");
+  let cmd = messageArray[0];
+  let args = messageArray.slice(1);
+  let commandfile = bot.commands.get(cmd.slice(prefix.length));
+  if(commandfile) commandfile.run(bot,message,args);
+
+});
+
+bot.login(config.token);
