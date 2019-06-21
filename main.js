@@ -4,6 +4,9 @@ const fs = require("fs");
 const bot = new Discord.Client({disableEveryone: true});
 bot.commands = new Discord.Collection();
 
+let cooldown = new Set();
+let cdtime = 5;///время
+
 fs.readdir("./commands/", (err, files) => {
 
   if(err) console.log(err);
@@ -48,6 +51,15 @@ bot.on("message", async message => {
   if(message.author.bot) return;
   if(message.channel.type === "dm") return;
 
+if(!message.content.startsWith(config.prefix)) return;
+  if(cooldown.has(message.author.id)){
+    message.delete();
+    return message.reply("Подожди 5 секунд перед использованием команды")
+  }
+  if(message.member.hasPermission("SEND_MESSAGES") & message.member.hasPermission("VIEW_CHANNEL")){
+    cooldown.add(message.author.id);
+  }
+
   let prefix = config.prefix;
   let messageArray = message.content.split(" ");
   let cmd = messageArray[0];
@@ -55,6 +67,9 @@ bot.on("message", async message => {
   let commandfile = bot.commands.get(cmd.slice(prefix.length));
   if(commandfile) commandfile.run(bot,message,args);
 
+    setTimeout(() => {
+    cooldown.delete(message.author.id)
+  }, cdtime * 1000)
 });
 
 bot.login(config.token);
