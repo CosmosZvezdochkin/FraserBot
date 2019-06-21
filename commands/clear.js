@@ -1,6 +1,7 @@
 const Discord = require('discord.js');
 
 module.exports.run = async (bot,message,args) =>{
+	message.delete(2000);
     let rawcount = message.content.slice(7);///Отрезает от сообщения первые 7 символов (~clear )
 
     var dMessages = -1;
