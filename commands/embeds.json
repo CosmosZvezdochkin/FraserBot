@@ -24,8 +24,10 @@
 ],
 
    "commands":[
-"restart",
-"today",
-"say"       
+"~restart",
+"~today",
+"~say",
+"~report",
+"~clear"       
 ]
 }
