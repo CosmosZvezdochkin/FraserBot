@@ -9,8 +9,7 @@ module.exports.run = async (bot,message,args) =>{
     const embed = new Discord.RichEmbed()
        .setColor("#3867d6")
 	   .addField(`Аргументы не введены`, '**Пример:** ~clear 5', false)
-	message.author.send(embed);
-	return;
+	return message.author.send(embed);
     }
 
     var count = parseInt(rawcount);///переводит string в number
@@ -19,29 +18,25 @@ module.exports.run = async (bot,message,args) =>{
     	const embed2 = new Discord.RichEmbed()
        .setColor("#3867d6")
 	   .addField(`Аргументы введены не верно`, '**Пример:** ~clear <число>', false)
-    	message.author.send(embed2);
-    	return;
+    	return message.author.send(embed2);
+
     }
     if(count >= 100){
     	const embed3 = new Discord.RichEmbed()
        .setColor("#3867d6")
 	   .addField(`Число не должно быть больше или равно 100`, '**Пример:** ~clear 5', false)
-    	message.author.send(embed3);
-    	return;
+    	return message.author.send(embed3);
     }
     if(count == 0){
     	const embed4 = new Discord.RichEmbed()
        .setColor("#3867d6")
 	   .addField(`Число не может быть равно 0`, '**Пример:** ~clear 5', false)
-    	message.author.send(embed4);
-    	return;
+    	return message.author.send(embed4);
     }
         message.channel.fetchMessages({limit: Math.min(count + 1, 100)}).then(messages => {
             messages.forEach(m => {
-                if (m.author.id == bot.user.id) {
                     m.delete().catch(console.error);
                     dMessages++;
-                }
             });
         }).then(() => {
                 if (dMessages === -1) dMessages = 0;
@@ -63,8 +58,7 @@ module.exports.run = async (bot,message,args) =>{
                     	scount = "сообщений";
                     	break;
                     }
-                message.reply(`было удалено ${dMessages} ${scount}`)
-                .then(m => m.delete(3000));
+                message.reply(`было удалено ${dMessages} ${scount}`).then(m => m.delete(3000));
         }).catch(console.error);
 }///Конец модуля run
 
