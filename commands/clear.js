@@ -10,7 +10,7 @@ module.exports.run = async (bot,message,args) =>{
     const embed = new Discord.RichEmbed()
        .setColor("#3867d6")
 	   .addField(`Аргументы не введены`, '**Пример:** ~clear 5', false)
-	return message.author.send(embed);
+	return message.author.send(embed).catch(console.error);
     }
 
     var count = parseInt(rawcount);///переводит string в number
@@ -19,20 +19,20 @@ module.exports.run = async (bot,message,args) =>{
     	const embed2 = new Discord.RichEmbed()
        .setColor("#3867d6")
 	   .addField(`Аргументы введены не верно`, '**Пример:** ~clear <число>', false)
-    	return message.author.send(embed2);
+    	return message.author.send(embed2).catch(console.error);
 
     }
     if(count >= 100){
     	const embed3 = new Discord.RichEmbed()
        .setColor("#3867d6")
 	   .addField(`Число не должно быть больше или равно 100`, '**Пример:** ~clear 5', false)
-    	return message.author.send(embed3);
+    	return message.author.send(embed3).catch(console.error);
     }
     if(count == 0){
     	const embed4 = new Discord.RichEmbed()
        .setColor("#3867d6")
 	   .addField(`Число не может быть равно 0`, '**Пример:** ~clear 5', false)
-    	return message.author.send(embed4);
+    	return message.author.send(embed4).catch(console.error);
     }
         message.channel.fetchMessages({limit: Math.min(count + 1, 100)}).then(messages => {
             messages.forEach(m => {
