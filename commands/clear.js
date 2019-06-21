@@ -2,8 +2,8 @@ const Discord = require('discord.js');
 
 module.exports.run = async (bot,message,args) =>{
     let rawcount = message.content.slice(7);///Отрезает от сообщения первые 7 символов (~clear )
-  
-    message.delete();///Удаляет сообщение с командой
+
+    var dMessages = -1;
 
 	if(!args[0]){
     const embed = new Discord.RichEmbed()
@@ -36,29 +36,36 @@ module.exports.run = async (bot,message,args) =>{
     	message.author.send(embed4);
     	return;
     }
-
-    var scount = ""
-    switch (count){
-    	case 1:
-    	scount = "сообщение";
-    	break;
-    	case 2:
-    	scount = "сообщения";
-    	break;
-    	case 3:
-    	scount = "сообщения";
-    	break;
-    	case 4:
-    	scount = "сообщения";
-    	break;
-    	default:
-    	scount = "сообщений";
-    	break;
-    }
-
-    message.channel.bulkDelete(count).then(()=>{
-    	message.reply(`было удалено ${count} ${scount}`).then(msg => msg.delete(3000));
-   })///конец catch
+        message.channel.fetchMessages({limit: Math.min(count + 1, 100)}).then(messages => {
+            messages.forEach(m => {
+                if (m.author.id == bot.user.id) {
+                    m.delete().catch(console.error);
+                    dMessages++;
+                }
+            });
+        }).then(() => {
+                if (dMessages === -1) dMessages = 0;
+                    var scount = ""
+                    switch (dMessages){
+                    	case 1:
+                    	scount = "сообщение";
+                    	break;
+                    	case 2:
+                    	scount = "сообщения";
+                    	break;
+                    	case 3:
+                    	scount = "сообщения";
+                    	break;
+                    	case 4:
+                    	scount = "сообщения";
+                    	break;
+                    	default:
+                    	scount = "сообщений";
+                    	break;
+                    }
+                message.reply(`было удалено ${dMessages} ${scount}`)
+                .then(m => m.delete(3000));
+        }).catch(console.error);
 }///Конец модуля run
 
 
